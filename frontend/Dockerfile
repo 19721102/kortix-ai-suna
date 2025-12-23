@@ -37,6 +37,14 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+ARG NEXT_PUBLIC_BACKEND_URL=http://localhost:8000/v1
+ARG NEXT_PUBLIC_URL=http://localhost:3000
+ARG NEXT_PUBLIC_ENV_MODE=LOCAL
+
+ENV NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+ENV NEXT_PUBLIC_URL=${NEXT_PUBLIC_URL}
+ENV NEXT_PUBLIC_ENV_MODE=${NEXT_PUBLIC_ENV_MODE}
+
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -52,6 +60,10 @@ RUN \
 # ---- Runner Stage ----
 FROM base AS runner
 WORKDIR /app
+
+ARG NEXT_PUBLIC_BACKEND_URL=http://localhost:8000/v1
+ARG NEXT_PUBLIC_URL=http://localhost:3000
+ARG NEXT_PUBLIC_ENV_MODE=LOCAL
 
 ENV NEXT_PUBLIC_VERCEL_ENV=production
 ENV NODE_ENV=production
@@ -72,6 +84,10 @@ USER nextjs
 EXPOSE 3000
 
 ENV PORT=3000
+
+ENV NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL}
+ENV NEXT_PUBLIC_URL=${NEXT_PUBLIC_URL}
+ENV NEXT_PUBLIC_ENV_MODE=${NEXT_PUBLIC_ENV_MODE}
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
